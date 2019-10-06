@@ -1,0 +1,292 @@
+Check point#: 1
+Date: 03/06
+Bug Name: Page fault when setting up paging
+Bug Description: "Only encounter page fault when accessing Video mem, works fine when accessing kernel memory."
+Reporter: Sherry
+Solution: "Bad For Loop, initialized it after the for loop instead of within the for loop."
+----------
+Check point#: 1
+Date: 03/06
+Bug Name: Paging does not initialize
+Bug Description: Paging is not enabled and cannot access proper memory
+Reporter: Krystal
+Solution: "Wrong order of loading Control Registers in assembly code, should be CR3 -> CR0 -> CR4"
+----------
+Check point#: 1
+Date: 03/07
+Bug Name: Send EOI
+Bug Description: RTC does not work.
+Reporter: Shirley & Lucia
+Solution: Not send EOI to both slave port and master port when irq number represents slave PIC
+----------
+Check point#: 2
+Date: 03/13
+Bug Name: Putc doesn't work correctly
+Bug Description: text postition is wrong
+Reporter: Sherry & Krystal
+Solution: Added a new function putkey() that correctly handles enter and sets the text position
+----------
+Check point#: 2
+Date: 03/14
+Bug Name: Type uncompatible in file system
+Bug Description: "When buffer pointer is passed as an argument, data cannot be stored in the buffer and be passed back to the last funciton."
+Reporter: Shirley
+Solution: "When the type of the input buffer is not matching the input of the funciton, we need to add a cast to the input buffer. Also, when passing local buffer as a pointer, we need to pass the address of the buffer as the input."
+----------
+Check point#: 2
+Date: 03/14
+Bug Name: Buffer not cleared after pressed enter
+Bug Description: after pressed enter the buffer should be cleared
+Reporter: Sherry & Krystal
+Solution: created a clear buffer function so when pressed enter key the buffer will be cleared
+----------
+Check point#: 2
+Date: 03/14
+Bug Name: Cannot auto enter
+Bug Description: Cannot auto print to a new line when the current line is full on the screen
+Reporter: Sherry & Krystal
+Solution: "Set up an auto_flag that marks auto entering; check for out-of-bound screen_x value and if so, move next text position to the beginning of the next line"
+----------
+Check point#: 2
+Date: 03/14
+Bug Name: Extra new line error
+Bug Description: new line should not be printed while press enter when the cursor is in the start of the line
+Reporter: Sherry & Krystal
+Solution: set flag to check if the auto new line has been made when the cursor is at the beginning of a line
+----------
+Check point#: 2
+Date: 03/15
+Bug Name: Need two separate buffer for terminal and keyboard
+Bug Description: "had misunderstanding before, we actually need to different buffer for terminal read/write and keyboard"
+Reporter: Sherry & Krystal
+Solution: created two line buffer for both terminal buffer and keyboard buffer
+----------
+Check point#: 2
+Date: 03/15
+Bug Name: Remove character error
+Bug Description: when pressed backspace for terminal the cursor has wrong behavior
+Reporter: Sherry
+Solution: created flag for terminal read so when remove character in terminal read function will not update cursor
+----------
+Check point#: 2
+Date: 03/15
+Bug Name: RTC rate abnormal
+Bug Description: rtc did not function in right frequency
+Reporter: Lucia
+Solution: The conversion of RTC rate from frequency was incorrect. Corrected a typo in power of two calculation
+----------
+Check point#: 2
+Date: 03/20
+Bug Name: File contents cannot be printed
+Bug Description: "When testing read_file, contents of the file cannot be printed out successfully."
+Reporter: Shirley
+Solution: "Because for executable files, there are many non-characters, printing the whole buf using printf cannot print out the whole buf. Also, if there is no null terminator at the end of the buf, printing the whole buf using printf would cause some errors. To print out the whole executable file, we can print the buf character by character and trace how many characters printed simultaneously. When the number of printed characters reach the total number of chars, just return."
+----------
+Check point#: 2
+Date: 03/20
+Bug Name: compiling error
+Bug Description: a bunch of function could not be found or multiple decleared
+Reporter: Sherry & Krystal
+Solution: make sure header files will not include each other
+----------
+Check point#: 2
+Date: 03/20
+Bug Name: Off by one error in display_key function
+Bug Description: Page fault when printing last character
+Reporter: Sherry & Krystal
+Solution: Change if condition to check for keyboard_buffer_size - 1
+----------
+Check point#: 2
+Date: 03/20
+Bug Name: when keyboard buffer is full can't press new line
+Bug Description: when keyboard buffer is full can't press new line to start to clear buffer
+Reporter: Sherry & Krystal
+Solution: "even though keyboard buffer size is 128 but we should reserved the last character space for new line, so even though we can't type any more character to the screen but we should still be able to press new line"
+----------
+Check point#: 2
+Date: 03/20
+Bug Name: Directory name error
+Bug Description: "When printing a directory name, if the length of the name is shorter than the length of the last name, there would be characters from last string at the end."
+Reporter: Shirley
+Solution: "When storing a directory name to a buffer, we need to add a null terminator at the end of the name."
+----------
+Check point#: 2
+Date: 03/21
+Bug Name: Terminal read error
+Bug Description: "Terminal read does not read correctly, does not check for new line character before reading"
+Reporter: Sherry & Krystal
+Solution: Added while loop for handling characters that are not new line
+----------
+Check point#: 3
+Date: 03/30
+Bug Name: Read file error
+Bug Description: Read_file doesn't work after modifying file system.
+Reporter: Shirley
+Solution: Update the offset in the pcb structure after at the end of read_file function.
+----------
+Check point#: 3
+Date: 04/05
+Bug Name: get_cur_pcb did not access right pcb
+Bug Description: current pcb accessed wrong location
+Reporter: Shirley & Lucia
+Solution: "An inline assembly error, esp was moved to eax instead of addr of pcb "
+----------
+Check point#: 3
+Date: 04/05
+Bug Name: page fault error
+Bug Description: when running execute encounter page fault
+Reporter: Sherry & Krystal
+Solution: "when create child pcb in execute, wrong calculation for the address"
+----------
+Check point#: 3
+Date: 04/06
+Bug Name: page fault after running ls
+Bug Description: "after running ls, a page fault will encounter"
+Reporter: Sherry & Krystal
+Solution: "Restore paging error, we need to restore paging before reset esp0 and restore ebp"
+----------
+Check point#: 3
+Date: 04/06
+Bug Name: program terminates abnormally
+Bug Description: "when one program finished, the ""program terminates abnormally"" sign comes out"
+Reporter: Sherry & Krystal
+Solution: "The return value from halt was wrong, we need to move return value to eax before we restore ebp value"
+----------
+Check point#: 3
+Date: 04/06
+Bug Name: can't type after finish running a program
+Bug Description: "after finish running a program, can't type to the terminal"
+Reporter: Sherry & Krystal
+Solution: "add sti() in the beginning of the tread, and add cli() at the end of tread, so we can accept keyboard interrrupt"
+----------
+Check point#: 3
+Date: 04/07
+Bug Name: system call linkage doesn't work
+Bug Description: error when we return back to the system linkage part
+Reporter: Sherry & Krystal
+Solution: "can't use pusha and popa for system call linkage, because we should not pop one of the register eax"
+----------
+Check point#: 4
+Date: 04/12
+Bug Name: grep/cat excutibles output error
+Bug Description: couldn't grep excutibles with null characters in the file
+Reporter: Shriley & Lucia
+Solution: Deleted null character check in terminal write function
+----------
+Check point#: 4
+Date: 04/12
+Bug Name: grep/cat error
+Bug Description: grep and cat arguments caused page fault after execution
+Reporter: Shriley & Lucia
+Solution: Added a null pointer to the argument buffer
+----------
+Check point#: 4
+Date: 04/12
+Bug Name: halt error
+Bug Description: halt does not function correctly
+Reporter: Shirley & Lucia
+Solution: Made sure to halt files only from index 2 to 7 (not stdin and stdout) as to match the check in the close function
+----------
+Check point#: 4
+Date: 04/12
+Bug Name: vidmap error
+Bug Description: "the page table was not mapped correctly. After excuting fish, nothing shows up on screen "
+Reporter: Shirley & Lucia
+Solution: Added video memory page table and recalculated mapping address
+----------
+Check point#: 5
+Date: 04/16
+Bug Name: page fault when try to switch terminal
+Bug Description: when try to switch terminal we will encounter page fault exception
+Reporter: Sherry & Krystal
+Solution: forget to remap backup page before we do memcpy
+----------
+Check point#: 5
+Date: 04/17
+Bug Name: pit error
+Bug Description: reboot after swith terminal
+Reporter: Sherry & Krystal
+Solution: "the counter of pit interrupt can overflow because it's 32 bits int, we need to mode it to prevent overflow"
+----------
+Check point#: 5
+Date: 04/20
+Bug Name: Magic buffer error
+Bug Description: "After performing certain instructions (like rtc), invalid command could trigger same process (like ls)"
+Reporter: Shirley & Lucia
+Solution: Initiliazed the magic buffer that contains first four bytes of directory entry to be 0 before reading and checking data
+----------
+Check point#: 5
+Date: 04/20
+Bug Name: command displays after halting
+Bug Description: "After counter finished running and halting ,commands could still display on the terminal"
+Reporter: Sherry & Krystal
+Solution: Cleared keyboard buffer when executing halt
+----------
+Check point#: 5
+Date: 04/20
+Bug Name: Random new lines
+Bug Description: Random new lines would appear on other terminals if one terminal is running counter
+Reporter: Sherry & Krystal
+Solution: "Forget to remap the memory for videomap before putting new line into the current running map, fixed after remap video mem in the beginning of the enter function"
+----------
+Check point#: 5
+Date: 04/20
+Bug Name: Ctrl + keyboard input
+Bug Description: letters and characters would appear when pressing Ctrl and keys other than L
+Reporter: Shirley & Lucia
+Solution: Set more conditions to restrict valid keyboard input with Ctrl
+----------
+Check point#: 5
+Date: 04/20
+Bug Name: Enter not allowed
+Bug Description: Enter fails when pingpong is running
+Reporter: Sherry & Krystal
+Solution: 
+----------
+Check point#: 5
+Date: 04/20
+Bug Name: RTC virtulaization
+Bug Description: Glitches when performing pingpong
+Reporter: Lucia
+Solution: rtc should correspond to current running terminal instead of displaying terminal
+----------
+Check point#: 5
+Date: 04/22
+Bug Name: terminal 1 doesn't have prompt
+Bug Description: "after we start all three terminal, only terminal 1doesn't have prompt, but the cursor was in the right space"
+Reporter: Sherry & Krystal
+Solution: "when doing mapping for video map after we swith terminal, forget to break after each switch case "
+----------
+Check point#: 5
+Date: 04/22
+Bug Name: fish displays to all terminal
+Bug Description: "when running fish, if we switch terminal, the fish will display to all terminal"
+Reporter: Shirley
+Solution: add fish check in terminal struct and remap user page after switch terminal
+----------
+Check point#: 5
+Date: 04/24
+Bug Name: Command and terminal buffer
+Bug Description: "Entering a new command while running fish, and pressing just enter after fish finished running will execute the previous command "
+Reporter: Krystal
+Solution: Clears terminal buffer everytime we halt
+----------
+Check point#: 5
+Date: 04/24
+Bug Name: Enter error
+Bug Description: Enter sometimes does not print a new prompt sometimes; Pressing enter and backspace at the same time does not give a new prompt
+Reporter: Krystal
+Solution: Deleted a line that initializes enter counter every time we encountered a new keyboard interrupt
+----------
+Check point#: 5
+Date: 04/24
+Bug Name: Command separated space 
+Bug Description: Argument couldn't be read if there were more than one space separating command and argument; argument contains couldn't be read
+Reporter: Shirley & Lucia
+Solution: Delete leading spaces before argument buffer and stop reading argument only when encountering null character
+----------
+Check point#: 5
+Date: 04/24
+Bug Name: Backspace error
+Bug Description: "When at the bottom line of terminal and we have auto entered a new line, pressing backspace brings cursor to a weird location"
+Reporter: Krystal
